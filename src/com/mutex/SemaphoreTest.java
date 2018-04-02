@@ -7,11 +7,11 @@ public class SemaphoreTest {
     // max 1 people
     static Semaphore semaphore = new Semaphore(1);
 
-    static class MyLockerThread extends Thread {
+    static class MutexAuctionThread extends Thread {
 
         String name = "";
 
-        MyLockerThread(String name) {
+        MutexAuctionThread(String name) {
             this.name = name;
         }
 
@@ -19,32 +19,31 @@ public class SemaphoreTest {
 
             try {
 
-                System.out.println(name + " : acquiring lock...");
-                System.out.println(name + " : available Semaphore permits now: "
+                System.out.println(name + " : фиксация блокировки...");
+                System.out.println(name + " : сейчас свободных доступов: "
                         + semaphore.availablePermits());
 
                 semaphore.acquire();
-                System.out.println(name + " : got the permit!");
+                System.out.println(name + " : получил разрешение!!");
 
                 try {
 
                     for (int i = 1; i <= 5; i++) {
 
-                        System.out.println(name + " : is performing operation " + i
-                                + ", available Semaphore permits : "
+                        System.out.println(name + " : выполняет операцию " + i
+                                + ", свободных доступов : "
                                 + semaphore.availablePermits());
 
-                        // sleep 1 second
-                        Thread.sleep(1000);
+                        // sleep 3 second
+                        Thread.sleep(3000);
 
                     }
 
                 } finally {
 
-                    // calling release() after a successful acquire()
-                    System.out.println(name + " : releasing lock...");
+                    System.out.println(name + " : освободил доступ...");
                     semaphore.release();
-                    System.out.println(name + " : available Semaphore permits now: "
+                    System.out.println(name + " : сейчас свободных доступов: "
                             + semaphore.availablePermits());
 
                 }
@@ -61,25 +60,25 @@ public class SemaphoreTest {
 
     public static void main(String[] args) {
 
-        System.out.println("Total available Semaphore permits : "
+        System.out.println("Всего свободных доступов : "
                 + semaphore.availablePermits());
 
-        MyLockerThread t1 = new MyLockerThread("A");
+        MutexAuctionThread t1 = new MutexAuctionThread("Гость 1");
         t1.start();
 
-        MyLockerThread t2 = new MyLockerThread("B");
+        MutexAuctionThread t2 = new MutexAuctionThread("Гость 2");
         t2.start();
 
-        MyLockerThread t3 = new MyLockerThread("C");
+        MutexAuctionThread t3 = new MutexAuctionThread("Гость 3");
         t3.start();
 
-        MyLockerThread t4 = new MyLockerThread("D");
+        MutexAuctionThread t4 = new MutexAuctionThread("Гость 4");
         t4.start();
 
-        MyLockerThread t5 = new MyLockerThread("E");
+        MutexAuctionThread t5 = new MutexAuctionThread("Гость 5");
         t5.start();
 
-        MyLockerThread t6 = new MyLockerThread("F");
+        MutexAuctionThread t6 = new MutexAuctionThread("Гость 6");
         t6.start();
 
     }
